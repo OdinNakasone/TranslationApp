@@ -13,13 +13,18 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_gallery" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_translation"
+            android:icon="@drawable/ic_baseline_translate_24"
+            android:title="@string/menu_translation" />
 
         <item
             android:id="@+id/nav_createAccount"
             android:icon="@drawable/ic_baseline_create_24"
             android:title="@string/menu_createAccount" />
+
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_baseline_login_24"
+            android:title="@string/menu_login" />
     </group>
 </menu>

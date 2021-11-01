@@ -13,13 +13,23 @@
         <action
             android:id="@+id/action_nav_home_to_nav_createAccount"
             app:destination="@id/nav_createAccount" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_login"
+            app:destination="@id/nav_login" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_createAccount"
         android:name="com.example.translationapp.ui.createAccount.CreateAccountFragment"
         android:label="@string/menu_createAccount"
-        tools:layout="@layout/fragment_create_account" />
+        tools:layout="@layout/fragment_create_account" >
+        <action
+            android:id="@+id/action_nav_createAccount_to_nav_login"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/nav_createAccount_to_nav_login"
+            app:destination="@id/nav_login" />
+    </fragment>
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.translationapp.ui.gallery.GalleryFragment"
@@ -27,8 +37,13 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.translationapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_login"
+        android:name="com.example.translationapp.ui.login.LoginFragment"
+        android:label="@string/menu_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/nav_translation"
+        android:name="com.example.translationapp.ui.translation.TranslationFragment"
+        android:label="@string/menu_translation"
+        tools:layout="@layout/fragment_translation" />
 </navigation>
