@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentCreateAccountBinding;
+import com.example.translationapp.encoders.PasswordEncoder;
 
 import java.util.Calendar;
 
@@ -30,6 +31,7 @@ public class CreateAccountFragment extends Fragment {
     private FragmentCreateAccountBinding binding;
     private EditText createUsername, createPassword, createReEnterPassword, createEmail;
     private Button confirmAccount, displayAge;
+    private TextView createAccountTitle;
     private DatePickerDialog datePickerDialog;
 
 
@@ -40,9 +42,12 @@ public class CreateAccountFragment extends Fragment {
         binding = FragmentCreateAccountBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        createAccountTitle = binding.textCreateAccount;
 
-        
-        final TextView textView = binding.textCreateAccount;
+        createUsername = binding.etCreateUsername;
+        createPassword = binding.etCreatePassword;
+        createReEnterPassword = binding.etCreateReEnterPassword;
+        createEmail = binding.etCreateEmail;
 
         displayAge = binding.btnDisplayAge;
         displayAge.setText(getTodayDate());
@@ -53,10 +58,9 @@ public class CreateAccountFragment extends Fragment {
                 datePickerDialog.show();
             }
         });
-        textView.setText("This is a Create Account Fragment");
+        createAccountTitle.setText("This is a Create Account Fragment");
 
         confirmAccount = binding.btnConfirmAccount;
-
         confirmAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +70,7 @@ public class CreateAccountFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getContext(), "Successful", Toast.LENGTH_SHORT).show();
+                        PasswordEncoder.encodePassword(createPassword.getText().toString());
                         Navigation.findNavController(view).navigate(R.id.nav_createAccount_to_nav_login);
                     }
                 });
@@ -151,10 +156,6 @@ public class CreateAccountFragment extends Fragment {
         }
 
         return "JAN";
-    }
-
-    private void confirmAccountAlert(){
-
     }
 
 
