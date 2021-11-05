@@ -4,9 +4,9 @@ import java.util.Base64;
 import java.util.Base64.*;
 
 public class PasswordEncoder {
-    public static void encodePassword(String password) {
+    public static String encodePassword(String password) {
         Encoder encoder = Base64.getEncoder();
-        encoder.encodeToString(password.getBytes());
+        return encoder.encodeToString(password.getBytes());
     }
 
 

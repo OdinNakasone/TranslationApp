@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentCreateAccountBinding;
 import com.example.translationapp.encoders.PasswordEncoder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CreateAccountFragment extends Fragment {
@@ -69,9 +84,15 @@ public class CreateAccountFragment extends Fragment {
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getContext(), "Successful", Toast.LENGTH_SHORT).show();
-                        PasswordEncoder.encodePassword(createPassword.getText().toString());
-                        Navigation.findNavController(view).navigate(R.id.nav_createAccount_to_nav_login);
+                        String usernameText = createUsername.getText().toString();
+                        String passwordText = createPassword.getText().toString();
+                        String emailText = createEmail.getText().toString();
+                        String birthdayText = displayAge.getText().toString();
+                        createUser(usernameText, passwordText, emailText, birthdayText, "No picture selected");
+
+
+
+
                     }
                 });
 
@@ -156,6 +177,70 @@ public class CreateAccountFragment extends Fragment {
         }
 
         return "JAN";
+    }
+
+    private void createUser(String username, String password, String email, String birthday, String profilePic){
+        final String URL = "http://10.0.0.234:8080/api/users/create";
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        JSONObject jBody = new JSONObject();
+        try{
+            jBody.put("username", username);
+            jBody.put("password", PasswordEncoder.encodePassword(password));
+            jBody.put("email", email);
+            jBody.put("birthday", birthday);
+            jBody.put("profilePic", profilePic);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        JsonObjectRequest jr = new JsonObjectRequest(Request.Method.POST, URL, jBody, response -> {
+            Toast.makeText(getContext(), "Successful", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(requireView()).navigate(R.id.nav_createAccount_to_nav_login);
+
+        }, error -> {
+            Toast.makeText(getContext(), "Fail to get response = " + error, Toast.LENGTH_LONG).show();
+        }) {
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                if (response.data == null || response.data.length == 0) {
+                    return Response.success(null, HttpHeaderParser.parseCacheHeaders(response));
+                } else {
+
+                    return super.parseNetworkResponse(response);
+                }
+
+            }
+        };
+
+        queue.add(jr);
+//
+//        StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//
+//                    }
+//                }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams(){
+//                Map<String, String> params = new HashMap<>();
+//
+//
+//                return params;
+//            }
+//        };
+
+
     }
 
 
