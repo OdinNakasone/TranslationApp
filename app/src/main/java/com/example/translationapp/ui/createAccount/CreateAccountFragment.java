@@ -73,7 +73,7 @@ public class CreateAccountFragment extends Fragment {
                 datePickerDialog.show();
             }
         });
-        createAccountTitle.setText("This is a Create Account Fragment");
+        createAccountTitle.setText("Create Your Account!");
 
         confirmAccount = binding.btnConfirmAccount;
         confirmAccount.setOnClickListener(new View.OnClickListener() {
@@ -84,15 +84,7 @@ public class CreateAccountFragment extends Fragment {
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String usernameText = createUsername.getText().toString();
-                        String passwordText = createPassword.getText().toString();
-                        String emailText = createEmail.getText().toString();
-                        String birthdayText = displayAge.getText().toString();
-                        createUser(usernameText, passwordText, emailText, birthdayText, "No picture selected");
-
-
-
-
+                        validateCreateUser();
                     }
                 });
 
@@ -102,11 +94,7 @@ public class CreateAccountFragment extends Fragment {
                         Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
                 alert.show();
-
-
             }
         });
 
@@ -179,8 +167,35 @@ public class CreateAccountFragment extends Fragment {
         return "JAN";
     }
 
-    private void createUser(String username, String password, String email, String birthday, String profilePic){
+    private void validateCreateUser(){
+        String usernameText = createUsername.getText().toString();
+        String passwordText = createPassword.getText().toString();
+        String reEnterPasswordText = createReEnterPassword.getText().toString();
+        String emailText = createEmail.getText().toString();
+        String birthdayText = displayAge.getText().toString();
+
+        if(!usernameText.isEmpty() && !passwordText.isEmpty() && !reEnterPasswordText.isEmpty() && !emailText.isEmpty() && !birthdayText.isEmpty()){
+            if(reEnterPasswordText.equals(passwordText)){
+                if(emailText.contains("@")){
+                    createUser(usernameText, passwordText, emailText, birthdayText);
+                }else{
+                    Toast.makeText(getContext(), "Email not formatted correctly.", Toast.LENGTH_LONG).show();
+                }
+            }
+            else {
+                Toast.makeText(getContext(), "Passwords don't Match", Toast.LENGTH_LONG).show();
+            }
+
+
+        } else{
+            Toast.makeText(getContext(), "Not all fields are filled", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void createUser(String username, String password, String email, String birthday){
         final String URL = "http://10.0.0.234:8080/api/users/create";
+
+        JSONObject parent = new JSONObject();
 
         RequestQueue queue = Volley.newRequestQueue(requireContext());
 
@@ -190,7 +205,7 @@ public class CreateAccountFragment extends Fragment {
             jBody.put("password", PasswordEncoder.encodePassword(password));
             jBody.put("email", email);
             jBody.put("birthday", birthday);
-            jBody.put("profilePic", profilePic);
+            parent.accumulate("data", jBody);
         }catch (JSONException e){
             e.printStackTrace();
         }

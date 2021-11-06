@@ -21,7 +21,7 @@ public class UserController {
         this.userRepo = userRepo;
     }
 
-    @GetMapping
+    @GetMapping("/login")
     public List<User> getAllUsers(){
         return userRepo.findAll();
     }
@@ -33,15 +33,16 @@ public class UserController {
 
     @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable long id){
-        User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + id + " does not exist."));
+        User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " does not exist."));
 
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User userDetails){
-        User userToUpdate = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + id + " does not exist."));
+        User userToUpdate = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " does not exist."));
 
+        userToUpdate.setUsername(userDetails.getUsername());
         userToUpdate.setPassword(userDetails.getPassword());
         userToUpdate.setEmail(userDetails.getEmail());
         userToUpdate.setProfilePic(userDetails.getProfilePic());
@@ -53,7 +54,7 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable long id){
-        User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + id + " does not exist."));
+        User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " does not exist."));
 
         userRepo.delete(user);
 

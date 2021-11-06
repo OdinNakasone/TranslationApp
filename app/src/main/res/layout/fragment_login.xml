@@ -23,30 +23,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.253" />
 
-    <EditText
-        android:id="@+id/etLoginPassword"
-        android:layout_width="378dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="128dp"
-        android:background="@drawable/et_style"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Enter Password"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLoginUsername" />
-
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
         android:text="Login"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLoginPassword" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.771" />
 
     <TextView
         android:id="@+id/tvLoginTitle"
@@ -54,6 +41,32 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/etLoginUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTestOutput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.903" />
+
+    <EditText
+        android:id="@+id/etLoginPassword"
+        android:layout_width="378dp"
+        android:layout_height="57dp"
+        android:background="@drawable/et_style"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Enter password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
