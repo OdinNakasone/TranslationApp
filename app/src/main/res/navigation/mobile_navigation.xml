@@ -49,5 +49,8 @@
         android:id="@+id/nav_translation"
         android:name="com.example.translationapp.ui.translation.TranslationFragment"
         android:label="@string/menu_translation"
-        tools:layout="@layout/fragment_translation" />
+        tools:layout="@layout/fragment_translation" >
+
+    </fragment>
+
 </navigation>

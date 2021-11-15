@@ -49,6 +49,8 @@ public class CreateAccountFragment extends Fragment {
     private TextView createAccountTitle;
     private DatePickerDialog datePickerDialog;
 
+    private String schoolIP = "10.10.26.35";
+
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -193,7 +195,7 @@ public class CreateAccountFragment extends Fragment {
     }
 
     private void createUser(String username, String password, String email, String birthday){
-        final String URL = "http://10.0.0.234:8080/api/users/create";
+        final String URL = String.format("http://%s:8080/api/users/create", schoolIP);
 
         JSONObject parent = new JSONObject();
 

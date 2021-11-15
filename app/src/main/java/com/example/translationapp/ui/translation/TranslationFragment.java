@@ -1,13 +1,21 @@
 package com.example.translationapp.ui.translation;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -15,13 +23,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.net.ConnectivityManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentTranslationBinding;
@@ -36,6 +48,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class TranslationFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -43,12 +56,14 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
     private FragmentTranslationBinding binding;
 
     private TextView displayTranslatedText;
-    private Button translateText;
+    private Button translateText, goToMaps;
     private EditText enterText;
+
 
     private Spinner languageOptions;
 
     private Translate translate;
+
     private String getLanguage;
 
      String[] languages = new String[]{
@@ -99,10 +114,9 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
             }
         });
 
-
-
         return root;
     }
+
 
     public void getTranslateService(){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

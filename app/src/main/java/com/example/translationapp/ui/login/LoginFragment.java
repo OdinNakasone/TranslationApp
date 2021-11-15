@@ -1,12 +1,11 @@
 package com.example.translationapp.ui.login;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -15,27 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.translationapp.R;
-import com.example.translationapp.databinding.FragmentGalleryBinding;
 import com.example.translationapp.databinding.FragmentLoginBinding;
 import com.example.translationapp.encoders.PasswordEncoder;
 import com.example.translationapp.models.User;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +41,14 @@ public class LoginFragment extends Fragment {
 
     private EditText loginUsername, loginPassword;
     private Button login;
-    private TextView displayLoginTitle, testOuput;
+    private TextView displayLoginTitle, testOuput, currentEmail;
+    public ImageView profilePic;
 
     private List<User> users;
-    private List<String> usernames;
 
     private FragmentLoginBinding binding;
+
+    private String schoolIP = "10.10.26.35";
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -57,10 +56,23 @@ public class LoginFragment extends Fragment {
 
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
+
         View root = binding.getRoot();
 
+        View v = LayoutInflater.from(requireContext()).inflate(R.layout.nav_header_main, null);
+
+        LinearLayout linearLayout = v.findViewById(R.id.header_layout);
+
+        View hView = linearLayout.getRootView();
+
+        currentEmail = hView.findViewById(R.id.tvCurrentEmail);
+
+
+
         users = new ArrayList<>();
-        usernames = new ArrayList<>();
+
+        //profilePic.findViewById(R.id.imageView);
+
 
         loginUsername = binding.etLoginUsername;
         loginPassword = binding.etLoginPassword;
@@ -69,6 +81,9 @@ public class LoginFragment extends Fragment {
         displayLoginTitle = binding.tvLoginTitle;
         displayLoginTitle.setText("Login");
         displayLoginTitle.setTextSize(24);
+
+
+        currentEmail.findViewById(R.id.tvCurrentEmail);
 
         login = binding.btnLogin;
 
@@ -89,7 +104,7 @@ public class LoginFragment extends Fragment {
         String passwordText = loginPassword.getText().toString();
 
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-        String URL = "http://10.0.0.234:8080/api/users/login";
+        String URL = String.format("http://%s:8080/api/users/login", schoolIP);
 
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
@@ -98,17 +113,25 @@ public class LoginFragment extends Fragment {
                 try {
                     for(int i = 0; i < response.length(); i++){
                         JSONObject obj = response.getJSONObject(i);
-                        User user = new User(obj.getString("username"), obj.getString("password"));
+                        User user = new User(obj.getString("username"), obj.getString("password"), obj.getString("email"));
                         users.add(user);
                     }
 
                     for(User u : users){
+
                         if(u.getUsername().equals(usernameText) && PasswordEncoder.decodePassword(u.getPassword()).equals(passwordText)){
+                            currentEmail.setText("Hello");
                             Navigation.findNavController(requireView()).navigate(R.id.action_nav_login_to_nav_translation);
-                            Toast.makeText(getContext(), "User Authorized", Toast.LENGTH_SHORT).show();
+                            break;
                         }else{
-                            Toast.makeText(getContext(), "User does not exist", Toast.LENGTH_SHORT).show();
+                            loginUsername.setText("");
+                            loginPassword.setText("");
+                            loginUsername.setHint("Username may not exist");
+                            loginPassword.setHint("Password may not exist");
+                            loginUsername.setHintTextColor(Color.RED);
+                            loginPassword.setHintTextColor(Color.RED);
                         }
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

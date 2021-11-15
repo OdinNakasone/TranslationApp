@@ -1,8 +1,13 @@
 package com.example.translationapp.ui.home;
 
+import static android.content.Context.WIFI_SERVICE;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +26,11 @@ import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentHomeBinding;
 import com.example.translationapp.ui.createAccount.CreateAccountFragment;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 public class HomeFragment extends Fragment {
 
 
@@ -38,6 +48,21 @@ public class HomeFragment extends Fragment {
         final TextView textView = binding.textHome;
         final Button goToCreateAccount = binding.btnGoToCreateAccount;
 
+        WifiManager manager = (WifiManager) requireContext().getSystemService(WIFI_SERVICE);
+
+        String ipAddress = null;
+        try {
+            ipAddress = InetAddress.getByAddress(
+                    ByteBuffer
+                    .allocate(Integer.BYTES)
+                    .order(ByteOrder.LITTLE_ENDIAN)
+                    .putInt(manager.getConnectionInfo().getIpAddress())
+                    .array()
+            ).getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
         goToCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,7 +70,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        textView.setText("This is a Home Fragment");
+        textView.setText("Ip address:  " + ipAddress);
 
         return root;
     }
