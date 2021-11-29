@@ -49,7 +49,7 @@ public class CreateAccountFragment extends Fragment {
     private TextView createAccountTitle;
     private DatePickerDialog datePickerDialog;
 
-    private String schoolIP = "10.10.26.35";
+    private String schoolIP = "10.10.16.161";
 
 
     @SuppressLint("SetTextI18n")

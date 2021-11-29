@@ -14,6 +14,7 @@ import android.os.StrictMode;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,13 +39,23 @@ import androidx.navigation.Navigation;
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentTranslationBinding;
 
+import com.google.api.gax.paging.Page;
 import com.google.auth.oauth2.GoogleCredentials;
+
+//import com.google.cloud.storage.Bucket;
+//import com.google.cloud.storage.Storage;
+//import com.google.cloud.storage.StorageOptions;
+//import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
+import com.google.protobuf.ByteString;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,13 +67,15 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
     private FragmentTranslationBinding binding;
 
     private TextView displayTranslatedText;
-    private Button translateText, goToMaps;
+    private Button translateText, speakText;
     private EditText enterText;
 
 
     private Spinner languageOptions;
 
     private Translate translate;
+
+
 
     private String getLanguage;
 
@@ -90,6 +103,7 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 
         displayTranslatedText = binding.tvDisplayTranslatedText;
         translateText = binding.btnTranslate;
+        speakText = binding.btnSpeakText;
         enterText = binding.etTranslateOriginal;
         languageOptions = binding.spnLanguageOptions;
 
@@ -103,18 +117,52 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
         translateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkInternetConnection()){
-                    getTranslateService();
+                //authImplicit();
+                try{
+                    if(checkInternetConnection()){
+                        getTranslateService();
 
-                    translateInput(getLanguage);
+                        translateInput(getLanguage);
 
-                }else{
-                    displayTranslatedText.setText(getResources().getString(R.string.no_connection));
+                    }else{
+                        displayTranslatedText.setText(getResources().getString(R.string.no_connection));
+                    }
+                }catch (Exception e){
+                    displayTranslatedText.setTextSize(10);
+                    enterText.setText(e.toString());
                 }
+
             }
         });
 
+
+
+//        speakText.setOnClickListener(view ->{
+//            try(TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()){
+//                SynthesisInput input = SynthesisInput.newBuilder().setText("Hello, World!").build();
+//
+//                VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
+//                        .setLanguageCode("en-US")
+//                        .setSsmlGender(SsmlVoiceGender.NEUTRAL)
+//                        .build();
+//
+//                AudioConfig audioConfig = AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.MP3).build();
+//
+//                SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
+//
+//                ByteString audioContents = response.getAudioContent();
+//
+//                try(OutputStream out  = new FileOutputStream("output.mp3")){
+//                    out.write(audioContents.toByteArray());
+//                }
+//            }catch (IOException ioe){
+//                ioe.printStackTrace();
+//            }
+//        });
+
         return root;
+
+
     }
 
 
@@ -130,6 +178,8 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
         }catch (IOException ioe){
             ioe.printStackTrace();
         }
+
+
     }
 
     public void translateInput(String language){
@@ -220,4 +270,14 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+//    public void authImplicit(){
+//        Storage storage = StorageOptions.getDefaultInstance().getService();
+//
+//        Page<Bucket> buckets = storage.list();
+//        for(Bucket bucket : buckets.iterateAll()){
+//            displayTranslatedText.setTextSize(14);
+//            displayTranslatedText.setText(bucket.toString());
+//        }
+//    }
 }

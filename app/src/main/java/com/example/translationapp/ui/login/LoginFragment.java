@@ -48,7 +48,7 @@ public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
 
-    private String schoolIP = "10.10.26.35";
+    private String schoolIP = "10.10.16.161";
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -120,16 +120,8 @@ public class LoginFragment extends Fragment {
                     for(User u : users){
 
                         if(u.getUsername().equals(usernameText) && PasswordEncoder.decodePassword(u.getPassword()).equals(passwordText)){
-                            currentEmail.setText("Hello");
                             Navigation.findNavController(requireView()).navigate(R.id.action_nav_login_to_nav_translation);
-                            break;
-                        }else{
-                            loginUsername.setText("");
-                            loginPassword.setText("");
-                            loginUsername.setHint("Username may not exist");
-                            loginPassword.setHint("Password may not exist");
-                            loginUsername.setHintTextColor(Color.RED);
-                            loginPassword.setHintTextColor(Color.RED);
+
                         }
 
                     }
