@@ -56,6 +56,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,6 +99,9 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         binding = FragmentTranslationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -159,6 +164,10 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 //                ioe.printStackTrace();
 //            }
 //        });
+
+        speakText.setOnClickListener(view -> {
+
+        });
 
         return root;
 

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,8 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentCreateAccountBinding;
@@ -37,20 +34,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class CreateAccountFragment extends Fragment {
+
+    public static final String IP_ADDRESS = "10.0.2.2";
 
     private FragmentCreateAccountBinding binding;
     private EditText createUsername, createPassword, createReEnterPassword, createEmail;
     private Button confirmAccount, displayAge;
     private TextView createAccountTitle;
     private DatePickerDialog datePickerDialog;
-
-    private String schoolIP = "10.10.16.161";
-
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -195,7 +189,7 @@ public class CreateAccountFragment extends Fragment {
     }
 
     private void createUser(String username, String password, String email, String birthday){
-        final String URL = String.format("http://%s:8080/api/users/create", schoolIP);
+        final String URL = String.format("http://%s:8080/api/users/create", IP_ADDRESS);
 
         JSONObject parent = new JSONObject();
 

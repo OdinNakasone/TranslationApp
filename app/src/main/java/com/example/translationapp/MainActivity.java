@@ -1,10 +1,13 @@
 package com.example.translationapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private TextView currentUsername, currentEmail;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +42,22 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_login, R.id.nav_translation)
                 .setOpenableLayout(drawer)
                 .build();
+
+        View headerView = navigationView.getHeaderView(0);
+
+        currentUsername = headerView.findViewById(R.id.tvCurrentUsername);
+        currentEmail = headerView.findViewById(R.id.tvCurrentEmail);
+
+
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -53,6 +67,44 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        Intent intent = getIntent();
+
+        String username = intent.getStringExtra("USER_NAME");
+        currentUsername.setText(username);
+        currentUsername.setHint("Username goes here");
+
+        String email = intent.getStringExtra("USER_EMAIL");
+        currentEmail.setText(email);
+        currentEmail.setHint("Email goes here");
+
+        MenuItem m = navigationView.getMenu().findItem(R.id.nav_login);
+        String currentUsernameText = currentUsername.getText().toString();
+        String currentEmailText = currentEmail.getText().toString();
+
+        if(currentUsernameText.equals("") || currentEmailText.equals("")){
+            m.setTitle("Login");
+
+        }else{
+            m.setTitle("Logout");
+        }
+
+        m.setOnMenuItemClickListener(menuItem -> {
+            if(menuItem.getTitle().equals("Logout")){
+                currentEmail.setText("");
+                currentUsername.setText("");
+                m.setTitle("Login");
+
+                Intent i = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(i);
+
+                return true;
+            }
+            return false;
+        });
+
+
+
         return true;
     }
 
