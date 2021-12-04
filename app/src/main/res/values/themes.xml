@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.TranslationApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/blue_Jeans</item>
+        <item name="colorPrimaryVariant">@color/blue_Jeans</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -13,6 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+    <item name="colorControlActivated">@color/blue_Jeans</item>
+
+    </style>
+
+
 
     <style name="Theme.TranslationApp.NoActionBar">
         <item name="windowActionBar">false</item>

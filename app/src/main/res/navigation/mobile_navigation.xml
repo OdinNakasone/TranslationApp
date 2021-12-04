@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_login"
             app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_translation"
+            app:destination="@id/nav_translation" />
     </fragment>
 
     <fragment
@@ -31,10 +34,10 @@
             app:destination="@id/nav_login" />
     </fragment>
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.translationapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_favorites"
+        android:name="com.example.translationapp.ui.favorites.FavoritesFragments"
+        android:label="@string/menu_favorites"
+        tools:layout="@layout/fragment_favorites" />
 
     <fragment
         android:id="@+id/nav_login"
@@ -44,6 +47,9 @@
         <action
             android:id="@+id/action_nav_login_to_nav_translation"
             app:destination="@id/nav_translation" />
+        <action
+            android:id="@+id/action_nav_login_to_nav_createAccount"
+            app:destination="@id/nav_createAccount" />
     </fragment>
     <fragment
         android:id="@+id/nav_translation"
@@ -51,6 +57,9 @@
         android:label="@string/menu_translation"
         tools:layout="@layout/fragment_translation" >
 
+        <action
+            android:id="@+id/action_nav_translation_to_nav_favorites"
+            app:destination="@id/nav_favorites" />
     </fragment>
 
 </navigation>

@@ -1,15 +1,20 @@
 package com.example.translationapp;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
 
+import com.example.translationapp.assets.LoadingBar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private TextView currentUsername, currentEmail;
     private NavigationView navigationView;
+    private LoadingBar loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        ActionBar actionBar;
+        actionBar = getSupportActionBar();
+
         setSupportActionBar(binding.appBarMain.toolbar);
+
 //        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -55,12 +65,19 @@ public class MainActivity extends AppCompatActivity {
         currentUsername = headerView.findViewById(R.id.tvCurrentUsername);
         currentEmail = headerView.findViewById(R.id.tvCurrentEmail);
 
-
+        loadingBar = new LoadingBar(this);
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+
+        if(actionBar != null){
+
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F7F2")));
+        }
     }
 
     @Override
@@ -95,8 +112,16 @@ public class MainActivity extends AppCompatActivity {
                 currentUsername.setText("");
                 m.setTitle("Login");
 
+                loadingBar.showDialog();
+                Handler handler = new Handler();
+
                 Intent i = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(i);
+
+                handler.postDelayed(() -> {
+                            loadingBar.dismissBar();
+                            this.startActivity(i);
+                        },
+                        2000);
 
                 return true;
             }

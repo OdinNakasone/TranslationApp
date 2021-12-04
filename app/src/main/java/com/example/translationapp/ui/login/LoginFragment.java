@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -27,9 +28,13 @@ import com.android.volley.toolbox.Volley;
 import com.example.translationapp.MainActivity;
 import com.example.translationapp.R;
 import com.example.translationapp.assets.LoadingBar;
+import com.example.translationapp.assets.LoadingFragments;
 import com.example.translationapp.databinding.FragmentLoginBinding;
 import com.example.translationapp.encoders.PasswordEncoder;
 import com.example.translationapp.models.User;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,22 +42,24 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class LoginFragment extends Fragment {
 
     public static final String IP_ADDRESS = "10.0.2.2";
 
-    private EditText loginUsername, loginPassword;
-    private Button login;
-    private TextView displayLoginTitle, testOuput, currentEmail;
+    private TextView login, forgotPassword, notRegistered;
     public ImageView profilePic;
     private LoadingBar loadingBar;
+
+    private TextInputLayout textInputLayoutUsername, textInputLayoutPassword;
+    private TextInputEditText textInputEditTextUsername, textInputEditTextPassword;
 
     private List<User> users;
 
     private FragmentLoginBinding binding;
-    //private ActivityMainBinding mainBinding;
+
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -67,34 +74,38 @@ public class LoginFragment extends Fragment {
 
         users = new ArrayList<>();
 
-        loginUsername = binding.etLoginUsername;
-        loginPassword = binding.etLoginPassword;
-
-        testOuput = binding.tvTestOutput;
-        displayLoginTitle = binding.tvLoginTitle;
-        displayLoginTitle.setText("Login");
-        displayLoginTitle.setTextSize(24);
+//        loginUsername = binding.etLoginUsername;
+//        loginPassword = binding.etLoginPassword;
+//
+//        testOuput = binding.tvTestOutput;
+//        displayLoginTitle = binding.tvLoginTitle;
+//        displayLoginTitle.setText("Login");
+//        displayLoginTitle.setTextSize(24);
 
 
         login = binding.btnLogin;
+        login.setOnClickListener(view -> loginUser());
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loginUser();
-            }
+        notRegistered = binding.tvGoToCreateAccount;
+        notRegistered.setOnClickListener(view -> {
+            LoadingFragments.transitionBetweenFragments(view, R.id.action_nav_login_to_nav_createAccount, requireActivity());
         });
 
         loadingBar = new LoadingBar(requireActivity());
 
+        textInputLayoutUsername = binding.textInputLayoutUsername;
+        textInputLayoutPassword = binding.textInputLayoutPassword;
 
+        textInputEditTextUsername = binding.textInputUsernameEt;
+        textInputEditTextPassword = binding.textInputPasswordEt;
 
         return root;
     }
 
     private void loginUser(){
-        String usernameText = loginUsername.getText().toString();
-        String passwordText = loginPassword.getText().toString();
+
+        String usernameText = Objects.requireNonNull(textInputEditTextUsername.getText()).toString();
+        String passwordText = Objects.requireNonNull(textInputEditTextPassword.getText()).toString();
 
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         String URL = String.format("http://%s:8080/api/users/login", IP_ADDRESS);
@@ -122,12 +133,9 @@ public class LoginFragment extends Fragment {
                             loadingBar.showDialog();
                             Handler handler = new Handler();
 
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    loadingBar.dismissBar();
-                                    requireActivity().startActivity(i);
-                                }
+                            handler.postDelayed(() -> {
+                                loadingBar.dismissBar();
+                                requireActivity().startActivity(i);
                             },
                                     2000);
 

@@ -119,25 +119,22 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
         languageOptions.setAdapter(adapter);
 
 
-        translateText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //authImplicit();
-                try{
-                    if(checkInternetConnection()){
-                        getTranslateService();
+        translateText.setOnClickListener(view -> {
+            //authImplicit();
+            try{
+                if(checkInternetConnection()){
+                    getTranslateService();
 
-                        translateInput(getLanguage);
+                    translateInput(getLanguage);
 
-                    }else{
-                        displayTranslatedText.setText(getResources().getString(R.string.no_connection));
-                    }
-                }catch (Exception e){
-                    displayTranslatedText.setTextSize(10);
-                    enterText.setText(e.toString());
+                }else{
+                    displayTranslatedText.setText(getResources().getString(R.string.no_connection));
                 }
-
+            }catch (Exception e){
+                displayTranslatedText.setTextSize(10);
+                enterText.setText(e.toString());
             }
+
         });
 
 
