@@ -49,11 +49,10 @@ public class LoginFragment extends Fragment {
 
     public static final String IP_ADDRESS = "10.0.2.2";
 
-    private TextView login, forgotPassword, notRegistered;
+
     public ImageView profilePic;
     private LoadingBar loadingBar;
 
-    private TextInputLayout textInputLayoutUsername, textInputLayoutPassword;
     private TextInputEditText textInputEditTextUsername, textInputEditTextPassword;
 
     private List<User> users;
@@ -83,18 +82,21 @@ public class LoginFragment extends Fragment {
 //        displayLoginTitle.setTextSize(24);
 
 
-        login = binding.btnLogin;
+        TextView login = binding.btnLogin;
         login.setOnClickListener(view -> loginUser());
 
-        notRegistered = binding.tvGoToCreateAccount;
+        TextView notRegistered = binding.tvGoToCreateAccount;
         notRegistered.setOnClickListener(view -> {
             LoadingFragments.transitionBetweenFragments(view, R.id.action_nav_login_to_nav_createAccount, requireActivity());
         });
 
+        TextView forgotPassword = binding.tvForgotPassword;
+        forgotPassword.setOnClickListener(view -> {
+            LoadingFragments.transitionBetweenFragments(view, R.id.action_nav_login_to_nav_forgot_password, requireActivity());
+        });
+
         loadingBar = new LoadingBar(requireActivity());
 
-        textInputLayoutUsername = binding.textInputLayoutUsername;
-        textInputLayoutPassword = binding.textInputLayoutPassword;
 
         textInputEditTextUsername = binding.textInputUsernameEt;
         textInputEditTextPassword = binding.textInputPasswordEt;

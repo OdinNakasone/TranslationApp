@@ -29,11 +29,14 @@ import com.android.volley.toolbox.Volley;
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentCreateAccountBinding;
 import com.example.translationapp.encoders.PasswordEncoder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 
 public class CreateAccountFragment extends Fragment {
@@ -41,9 +44,8 @@ public class CreateAccountFragment extends Fragment {
     public static final String IP_ADDRESS = "10.0.2.2";
 
     private FragmentCreateAccountBinding binding;
-    private EditText createUsername, createPassword, createReEnterPassword, createEmail;
-    private Button confirmAccount, displayAge;
-    private TextView createAccountTitle;
+    private TextInputEditText createUsername, createPassword, createReEnterPassword, createEmail, displayBirthday;
+    private TextView confirmAccount;
     private DatePickerDialog datePickerDialog;
 
     @SuppressLint("SetTextI18n")
@@ -53,23 +55,23 @@ public class CreateAccountFragment extends Fragment {
         binding = FragmentCreateAccountBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        createAccountTitle = binding.textCreateAccount;
 
-        createUsername = binding.etCreateUsername;
-        createPassword = binding.etCreatePassword;
-        createReEnterPassword = binding.etCreateReEnterPassword;
-        createEmail = binding.etCreateEmail;
 
-        displayAge = binding.btnDisplayAge;
-        displayAge.setText(getTodayDate());
-        displayAge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initDatePicker();
-                datePickerDialog.show();
-            }
+        createUsername = binding.textInputCreateUsernameEt;
+        createPassword = binding.textInputCreatePasswordEt;
+        createReEnterPassword = binding.textInputCreateReEnterPasswordEt;
+        createEmail = binding.textInputCreateEmailEt;
+
+        displayBirthday = binding.textInputCreateBirthdayEt;
+
+        TextInputLayout birthdayAction = binding.textInputLayoutCreateBirthday;
+        birthdayAction.setStartIconOnClickListener(view -> {
+            initDatePicker();
+            datePickerDialog.show();
         });
-        createAccountTitle.setText("Create Your Account!");
+
+
+        displayBirthday.setText(getTodayDate());
 
         confirmAccount = binding.btnConfirmAccount;
         confirmAccount.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +115,7 @@ public class CreateAccountFragment extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
-                displayAge.setText(date);
+                displayBirthday.setText(date);
             }
         };
 
@@ -164,15 +166,15 @@ public class CreateAccountFragment extends Fragment {
     }
 
     private void validateCreateUser(){
-        String usernameText = createUsername.getText().toString();
-        String passwordText = createPassword.getText().toString();
-        String reEnterPasswordText = createReEnterPassword.getText().toString();
-        String emailText = createEmail.getText().toString();
-        String birthdayText = displayAge.getText().toString();
+        String usernameText = Objects.requireNonNull(createUsername.getText()).toString();
+        String passwordText = Objects.requireNonNull(createPassword.getText()).toString();
+        String reEnterPasswordText = Objects.requireNonNull(createReEnterPassword.getText()).toString();
+        String emailText = Objects.requireNonNull(createEmail.getText()).toString();
+        String birthdayText = Objects.requireNonNull(displayBirthday.getText()).toString();
 
         if(!usernameText.isEmpty() && !passwordText.isEmpty() && !reEnterPasswordText.isEmpty() && !emailText.isEmpty() && !birthdayText.isEmpty()){
             if(reEnterPasswordText.equals(passwordText)){
-                if(emailText.contains("@")){
+                if(emailText.contains("@") && emailText.contains(".com")){
                     createUser(usernameText, passwordText, emailText, birthdayText);
                 }else{
                     Toast.makeText(getContext(), "Email not formatted correctly.", Toast.LENGTH_LONG).show();

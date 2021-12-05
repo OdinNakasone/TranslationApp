@@ -39,9 +39,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ActionBar actionBar;
-        actionBar = getSupportActionBar();
-
         setSupportActionBar(binding.appBarMain.toolbar);
 
 //        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
@@ -72,12 +69,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-
-        if(actionBar != null){
-
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F7F2")));
-        }
     }
 
     @Override

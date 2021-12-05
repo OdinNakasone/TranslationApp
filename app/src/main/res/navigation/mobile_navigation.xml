@@ -40,6 +40,11 @@
         tools:layout="@layout/fragment_favorites" />
 
     <fragment
+        android:id="@+id/nav_forgot_password"
+        android:name="com.example.translationapp.ui.forgotPassword.ForgotPassword"
+        android:label="@string/menu_forgotPassword"
+        tools:layout="@layout/fragment_forgot_password" />
+    <fragment
         android:id="@+id/nav_login"
         android:name="com.example.translationapp.ui.login.LoginFragment"
         android:label="@string/menu_login"
@@ -50,6 +55,9 @@
         <action
             android:id="@+id/action_nav_login_to_nav_createAccount"
             app:destination="@id/nav_createAccount" />
+        <action
+            android:id="@+id/action_nav_login_to_nav_forgot_password"
+            app:destination="@id/nav_forgot_password" />
     </fragment>
     <fragment
         android:id="@+id/nav_translation"

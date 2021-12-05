@@ -15,11 +15,15 @@
     <string name="menu_createAccount">Create Account</string>
     <string name="menu_login">Login</string>
     <string name="menu_googleMaps">Google Maps</string>
+    <string name="menu_forgotPassword">Forgot Password</string>
     <string name="no_connection">No Internet Connection! Cannot be Translated!</string>
     <string name="loading">Loading…</string>
-    <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="app_title">Buddy Translate</string>
     <string name="forgot_password"><u>Forgot Password?</u></string>
     <string name="not_registered"><u>Don\'t have an account? Sign Up Here!</u></string>
+    <string name="username">Username</string>
+    <string name="re_enter_password">Re-Enter Password</string>
+    <string name="email">Email</string>
+    <string name="birthday">Birthday</string>
 </resources>
