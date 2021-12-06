@@ -39,6 +39,7 @@ import androidx.navigation.Navigation;
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentTranslationBinding;
 
+import com.example.translationapp.encoders.TranslationService;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.api.gax.paging.Page;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -69,17 +70,13 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 
 
     private FragmentTranslationBinding binding;
+    private TranslationService translationService;
 
     private TextView displayTranslatedText, translateText;
-    private Button speakText;
     private TextInputEditText enterText;
 
 
     private Spinner languageOptions;
-
-    private Translate translate;
-
-
 
     private String getLanguage;
 
@@ -112,6 +109,7 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
         translateText = binding.btnTranslate;
         enterText = binding.textInputTranslateEt;
         languageOptions = binding.spnLanguageOptions;
+        translationService = new TranslationService();
 
         languageOptions.setOnItemSelectedListener(this);
 
@@ -121,12 +119,11 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 
 
         translateText.setOnClickListener(view -> {
-            //authImplicit();
             try{
-                if(checkInternetConnection()){
-                    getTranslateService();
+                if(translationService.checkInternetConnection(requireContext())){
+                    translationService.getTranslateService(getResources());
 
-                    translateInput(getLanguage);
+                    translationService.translateInput(getLanguage, enterText, displayTranslatedText);
 
                 }else{
                     displayTranslatedText.setText(getResources().getString(R.string.no_connection));
@@ -138,68 +135,11 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 
         });
 
-
-
-//        speakText.setOnClickListener(view ->{
-//            try(TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()){
-//                SynthesisInput input = SynthesisInput.newBuilder().setText("Hello, World!").build();
-//
-//                VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
-//                        .setLanguageCode("en-US")
-//                        .setSsmlGender(SsmlVoiceGender.NEUTRAL)
-//                        .build();
-//
-//                AudioConfig audioConfig = AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.MP3).build();
-//
-//                SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
-//
-//                ByteString audioContents = response.getAudioContent();
-//
-//                try(OutputStream out  = new FileOutputStream("output.mp3")){
-//                    out.write(audioContents.toByteArray());
-//                }
-//            }catch (IOException ioe){
-//                ioe.printStackTrace();
-//            }
-//        });
-
         return root;
-
-
     }
 
 
-    public void getTranslateService(){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
-        try(InputStream is = getResources().openRawResource(R.raw.credentials)){
-            final GoogleCredentials myCredentials = GoogleCredentials.fromStream(is);
-
-            TranslateOptions translateOptions = TranslateOptions.newBuilder().setCredentials(myCredentials).build();
-            translate = translateOptions.getService();
-        }catch (IOException ioe){
-            ioe.printStackTrace();
-        }
-
-
-    }
-
-    public void translateInput(String language){
-        String originalText = Objects.requireNonNull(enterText.getText()).toString();
-        Translation translation = translate.translate(originalText, Translate.TranslateOption.targetLanguage(language), Translate.TranslateOption.model("base"));
-        String translatedText = translation.getTranslatedText();
-        displayTranslatedText.setText(translatedText);
-
-    }
-
-    public boolean checkInternetConnection(){
-        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return connectivityManager.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_MOBILE ||
-                connectivityManager.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
-
-    }
 
     @Override
     public void onDestroyView() {
@@ -274,13 +214,4 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 
     }
 
-//    public void authImplicit(){
-//        Storage storage = StorageOptions.getDefaultInstance().getService();
-//
-//        Page<Bucket> buckets = storage.list();
-//        for(Bucket bucket : buckets.iterateAll()){
-//            displayTranslatedText.setTextSize(14);
-//            displayTranslatedText.setText(bucket.toString());
-//        }
-//    }
 }
