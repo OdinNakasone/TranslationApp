@@ -39,6 +39,7 @@ import androidx.navigation.Navigation;
 import com.example.translationapp.R;
 import com.example.translationapp.databinding.FragmentTranslationBinding;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.api.gax.paging.Page;
 import com.google.auth.oauth2.GoogleCredentials;
 
@@ -62,15 +63,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class TranslationFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
 
     private FragmentTranslationBinding binding;
 
-    private TextView displayTranslatedText;
-    private Button translateText, speakText;
-    private EditText enterText;
+    private TextView displayTranslatedText, translateText;
+    private Button speakText;
+    private TextInputEditText enterText;
 
 
     private Spinner languageOptions;
@@ -108,8 +110,7 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 
         displayTranslatedText = binding.tvDisplayTranslatedText;
         translateText = binding.btnTranslate;
-        speakText = binding.btnSpeakText;
-        enterText = binding.etTranslateOriginal;
+        enterText = binding.textInputTranslateEt;
         languageOptions = binding.spnLanguageOptions;
 
         languageOptions.setOnItemSelectedListener(this);
@@ -162,10 +163,6 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
 //            }
 //        });
 
-        speakText.setOnClickListener(view -> {
-
-        });
-
         return root;
 
 
@@ -189,7 +186,7 @@ public class TranslationFragment extends Fragment implements AdapterView.OnItemS
     }
 
     public void translateInput(String language){
-        String originalText = enterText.getText().toString();
+        String originalText = Objects.requireNonNull(enterText.getText()).toString();
         Translation translation = translate.translate(originalText, Translate.TranslateOption.targetLanguage(language), Translate.TranslateOption.model("base"));
         String translatedText = translation.getTranslatedText();
         displayTranslatedText.setText(translatedText);

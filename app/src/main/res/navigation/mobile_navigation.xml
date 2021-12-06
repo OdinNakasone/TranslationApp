@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_translation"
             app:destination="@id/nav_translation" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_chat"
+            app:destination="@id/nav_chat" />
     </fragment>
 
     <fragment
@@ -41,9 +44,14 @@
 
     <fragment
         android:id="@+id/nav_forgot_password"
-        android:name="com.example.translationapp.ui.forgotPassword.ForgotPassword"
+        android:name="com.example.translationapp.ui.forgotPassword.ForgotPasswordFragment"
         android:label="@string/menu_forgotPassword"
         tools:layout="@layout/fragment_forgot_password" />
+    <fragment
+        android:id="@+id/nav_chat"
+        android:name="com.example.translationapp.ui.chat.ChatFragment"
+        android:label="@string/menu_chat"
+        tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/nav_login"
         android:name="com.example.translationapp.ui.login.LoginFragment"

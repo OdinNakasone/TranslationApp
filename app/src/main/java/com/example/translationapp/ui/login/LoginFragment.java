@@ -129,8 +129,14 @@ public class LoginFragment extends Fragment {
 
                         if(u.getUsername().equals(usernameText) && PasswordEncoder.decodePassword(u.getPassword()).equals(passwordText)){
                             Intent i = new Intent(requireActivity().getBaseContext(), MainActivity.class);
+                            emailText = u.getEmail();
                             i.putExtra("USER_NAME", usernameText);
                             i.putExtra("USER_EMAIL", emailText);
+
+                            Fragment fragment = new Fragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("USER_NAME_TEXT", usernameText);
+                            fragment.setArguments(bundle);
 
                             loadingBar.showDialog();
                             Handler handler = new Handler();
